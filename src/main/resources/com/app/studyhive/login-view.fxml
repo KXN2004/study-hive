@@ -44,7 +44,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.Controller">
     <children>
         <ImageView fitHeight="430.0" fitWidth="1790.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -55,12 +55,12 @@
             <children>
                 <Pane prefHeight="234.0" prefWidth="224.0">
                     <children>
-                        <VBox alignment="CENTER" layoutY="93.0" prefHeight="210.0" prefWidth="224.0" style="-fx-padding: 0 10; -fx-background-color: rgba(0,0,0,0.5);">
+                        <VBox fx:id="login" alignment="CENTER" layoutY="93.0" prefHeight="210.0" prefWidth="224.0" style="-fx-padding: 0 10; -fx-background-color: rgba(0,0,0,0.5);">
                             <children>
-                                <Label prefHeight="26.0" prefWidth="362.0" text="Login" textAlignment="CENTER" textFill="WHITE" />
+                                <Label prefHeight="26.0" prefWidth="362.0" text="Welcome to StudyHive" textAlignment="CENTER" textFill="WHITE" />
                                 <VBox prefHeight="58.0" prefWidth="224.0" style="-fx-padding: 10; -fx-background-color: rgba(255,255,255,0.5);">
                                     <children>
-                                        <Label fx:id="logText" prefHeight="0.0" prefWidth="241.0" style="-fx-background-color: transparent;" text="Email or Username" />
+                                        <Label fx:id="logText" prefHeight="0.0" prefWidth="241.0" style="-fx-background-color: transparent;" text="Username" />
                                         <TextField fx:id="userName" promptText="\@student.sfit.ac.in" />
                                         <Label prefHeight="0.0" prefWidth="241.0" />
                                         <Label prefHeight="0.0" prefWidth="241.0" text="Password" />
@@ -83,6 +83,8 @@
                                 </HBox>
                             </children>
                         </VBox>
+<!--                        <VBox fx:id="successful" alignment="CENTER" layoutY="93.0" prefHeight="210.0" prefWidth="224.0" style="-fx-padding: 0 10; -fx-background-color: rgba(0,0,0,0.5);">-->
+<!--                        </VBox>-->
                     </children>
                 </Pane>
             </children>
