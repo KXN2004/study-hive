@@ -18,7 +18,7 @@ public class Controller {
 
     static {
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive","root",System.getenv("DB_PASSWORD"));
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive","root", System.getenv("DB_PASSWORD"));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -34,9 +34,9 @@ public class Controller {
             prompt.setText("field contains whitespace!");
             System.out.println("username or password contains whitespace");
             return false;
-        } else if (username.length() >= 20 || password.length() >= 20) {
-            prompt.setText("username/password too long");
-            System.out.println("username or password is too long (>= 20 characters)");
+        } else if (username.length() >= 8 || password.length() >= 8) {
+            prompt.setText("username or password is too long");
+            System.out.println("username or password is too long (>= 8 characters)");
             return false;
         }
         return true;
@@ -69,13 +69,18 @@ public class Controller {
     // Function to be called when the students want to sign up
     @FXML
     void signUp() throws SQLException {
+        // If username and password are in an acceptable format
         if (verifyInput(userName.getText(), passWord.getText())) {
             try {
+                // Generate hash for the password
                 String hash = BCrypt.hashpw(passWord.getText(), BCrypt.gensalt());
+                // Store the hash in the database
                 con.createStatement().executeUpdate("insert into credentials(username, password) value (\"" + userName.getText() + "\", \"" + hash + "\")");
-                prompt.setText("Signup Successful!");
+                // Display the prompt text
+                prompt.setText("Signup successful!");
+                // Display the output in the console
                 System.out.println("Added student to the database");
-            } catch (SQLIntegrityConstraintViolationException e) {
+            } catch (SQLIntegrityConstraintViolationException e) { // If the student is already registered
                 prompt.setText("student already exists");
                 System.out.println("A student with this username already exists!");
             }

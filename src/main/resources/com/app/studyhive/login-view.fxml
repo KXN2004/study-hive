@@ -83,8 +83,6 @@
                                 </HBox>
                             </children>
                         </VBox>
-<!--                        <VBox fx:id="successful" alignment="CENTER" layoutY="93.0" prefHeight="210.0" prefWidth="224.0" style="-fx-padding: 0 10; -fx-background-color: rgba(0,0,0,0.5);">-->
-<!--                        </VBox>-->
                     </children>
                 </Pane>
             </children>
