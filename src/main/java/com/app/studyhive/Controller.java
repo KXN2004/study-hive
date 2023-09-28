@@ -18,7 +18,7 @@ public class Controller {
 
     static {
         try {
-                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive","root","kxn_2004");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive","root",System.getenv("DB_PASSWORD"));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -56,6 +56,7 @@ public class Controller {
                 prompt.setText("username doesn't exist");
                 System.out.println("A student with this username doesn't exist!");
             } else {
+                System.out.println(resultSet.getString(3));
                 if (BCrypt.checkpw(passWord.getText(), resultSet.getString(3)))
                     return true;
                 else
