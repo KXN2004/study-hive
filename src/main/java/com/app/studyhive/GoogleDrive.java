@@ -10,21 +10,32 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.classroom.ClassroomScopes;
-import com.google.api.services.classroom.model.*;
-import com.google.api.services.classroom.Classroom;
-
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Login {
+/* class to demonstrate use of Drive files list API */
+public class GoogleDrive {
+    /**
+     * Application name.
+     */
     private static final String APPLICATION_NAME = "StudyHive";
+    /**
+     * Global instance of the JSON factory.
+     */
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    /**
+     * Directory to store authorization tokens for this application.
+     */
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
     /**
@@ -32,7 +43,7 @@ public class Login {
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES =
-            Collections.singletonList(ClassroomScopes.CLASSROOM_COURSES_READONLY);
+            Arrays.asList(DriveScopes.DRIVE_METADATA_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     /**
@@ -45,7 +56,7 @@ public class Login {
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
             throws IOException {
         // Load client secrets.
-        InputStream in = Login.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        InputStream in = GoogleDrive.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
@@ -59,28 +70,30 @@ public class Login {
                 .setAccessType("offline")
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        //returns an authorized Credential object.
+        return credential;
     }
 
     public static void main(String... args) throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Classroom service =
-                new Classroom.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                        .setApplicationName(APPLICATION_NAME)
-                        .build();
+        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
 
-        // List the first 10 courses that the user has access to.
-        ListCoursesResponse response = service.courses().list()
+        // Print the names and IDs for up to 10 files.
+        FileList result = service.files().list()
                 .setPageSize(10)
+                .setFields("nextPageToken, files(id, name)")
                 .execute();
-        List<Course> courses = response.getCourses();
-        if (courses == null || courses.isEmpty()) {
-            System.out.println("No courses found.");
+        List<File> files = result.getFiles();
+        if (files == null || files.isEmpty()) {
+            System.out.println("No files found.");
         } else {
-            System.out.println("Courses:");
-            for (Course course : courses) {
-                System.out.printf("%s\n", course.getName());
+            System.out.println("Files:");
+            for (File file : files) {
+                System.out.printf("%s (%s)\n", file.getName(), file.getId());
             }
         }
     }
