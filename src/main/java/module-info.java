@@ -12,8 +12,9 @@ module com.app.studyhive {
     requires com.google.api.client.json.gson;
     requires com.google.api.client.json.jackson2;
     requires com.google.api.services.classroom;
-    requires jdk.httpserver;
     requires com.google.api.services.drive;
+    requires com.google.api.services.tasks;
+    requires jdk.httpserver;
 
 
     opens com.app.studyhive to javafx.fxml;
