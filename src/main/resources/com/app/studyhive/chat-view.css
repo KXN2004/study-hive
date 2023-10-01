@@ -1,0 +1,16 @@
+#body {
+    -fx-background-color: linear-gradient(to right, #ffaf03 20%, #fffb00 80%);
+}
+HBox.main {
+    -fx-padding: 10px;
+}
+.dashboard {
+    -fx-padding: 10px;
+}
+.group-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
