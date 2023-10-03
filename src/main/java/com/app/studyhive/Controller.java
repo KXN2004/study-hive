@@ -1,5 +1,7 @@
 package com.app.studyhive;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.*;
 
 import javafx.fxml.FXML;
@@ -40,6 +42,12 @@ public class Controller {
             return false;
         }
         return true;
+    }
+
+    // Function to be called when the student wants to sign in usin google
+    @FXML
+    void googleSignIn() throws GeneralSecurityException, IOException {
+        Google.signIn();
     }
 
     // Function to be called when the student wants to sign in

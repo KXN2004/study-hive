@@ -82,6 +82,8 @@ public class GoogleDrive {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
+        System.out.println(service.drives().list().execute());
+
         // Print the names and IDs for up to 10 files.
         FileList result = service.files().list()
                 .setPageSize(10)
