@@ -15,6 +15,7 @@ module com.app.studyhive {
     requires com.google.api.services.drive;
     requires com.google.api.services.tasks;
     requires jdk.httpserver;
+    requires com.google.api.services.calendar;
 
 
     opens com.app.studyhive to javafx.fxml;
