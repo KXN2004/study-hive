@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.*;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -21,10 +22,13 @@ public class Controller {
     static {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive","root", System.getenv("DB_PASSWORD"));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    // genderCombo.setItems(FXCollections.observableArrayList("Male", "Female", "Other"));
+
 
     // Functions which checks whether the input is acceptable
     boolean verifyInput(String username, String password) {
@@ -44,7 +48,7 @@ public class Controller {
         return true;
     }
 
-    // Function to be called when the student wants to sign in usin google
+    // Function to be called when the student wants to sign in using google
     @FXML
     void googleSignIn() throws GeneralSecurityException, IOException {
         Google.signIn();
@@ -64,7 +68,6 @@ public class Controller {
                 prompt.setText("username doesn't exist");
                 System.out.println("A student with this username doesn't exist!");
             } else {
-                System.out.println(resultSet.getString(3));
                 if (BCrypt.checkpw(passWord.getText(), resultSet.getString(3)))
                     return true;
                 else

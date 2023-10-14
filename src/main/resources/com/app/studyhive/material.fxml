@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="579.0" prefWidth="579.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.TestMaterialFx">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="261.0" layoutY="105.0" prefHeight="468.0" prefWidth="289.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="278.0" spacing="10.0">
+               <children>
+                  <MFXTextField floatingText="First Name" prefHeight="51.0" prefWidth="135.0" />
+                  <MFXTextField floatingText="Last Name" prefHeight="51.0" prefWidth="135.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="278.0">
+               <children>
+                  <MFXTextField floatingText="Username" prefWidth="280.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="200.0">
+               <children>
+                  <MFXTextField floatingText="Email" prefHeight="51.0" prefWidth="280.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <MFXComboBox fx:id="myComboBox" floatingText="Gender" prefHeight="51.0" prefWidth="135.0" />
+                  <MFXDatePicker floatMode="INLINE" floatingText="Birth Date" prefHeight="51.0" prefWidth="135.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="200.0">
+               <children>
+                  <MFXPasswordField floatingText="Password" prefWidth="280.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="200.0">
+               <children>
+                  <MFXPasswordField floatingText="Confirm Password" prefWidth="280.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <MFXButton fx:id="myButton" buttonType="RAISED" onAction="#clickButton" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Local Sign up">
+                     <font>
+                        <Font size="16.0" />
+                     </font></MFXButton>
+                  <MFXButton buttonType="RAISED" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Google Sign up">
+                     <font>
+                        <Font size="16.0" />
+                     </font></MFXButton>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Rectangle height="579.0" stroke="#00a1ff00" strokeType="INSIDE" strokeWidth="0.0" width="237.0">
+         <effect>
+            <DropShadow radius="15.895" width="44.58" />
+         </effect>
+         <fill>
+            <LinearGradient endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="0.9171974658966064" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="0.6719597578048706" blue="0.03999999910593033" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+      <Label layoutX="323.0" layoutY="31.0" text="Register">
+         <font>
+            <Font name="System Bold" size="48.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="19.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/studyhive.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
