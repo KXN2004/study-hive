@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="579.0" prefWidth="579.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.TestMaterialFx">
+<AnchorPane prefHeight="579.0" prefWidth="579.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.ToDoList">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="261.0" layoutY="105.0" prefHeight="468.0" prefWidth="289.0">
          <children>

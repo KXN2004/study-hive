@@ -27,9 +27,6 @@ public class Controller {
         }
     }
 
-    // genderCombo.setItems(FXCollections.observableArrayList("Male", "Female", "Other"));
-
-
     // Functions which checks whether the input is acceptable
     boolean verifyInput(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
