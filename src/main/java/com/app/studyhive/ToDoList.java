@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 
 import java.sql.*;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -16,7 +17,7 @@ public class ToDoList {
 
     static {
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive","root", "kxn_2004");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive", "root", System.getenv("DB_PASSWORD"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -43,7 +44,17 @@ public class ToDoList {
     @FXML
     private MFXTextField text;
 
-    boolean isTaskEmpty() {
+    boolean isTaskPresent(String string) {
+        label.setText("");
+        ObservableList<String> taskList = tasks.getItems();
+        if (taskList.contains(string)) {
+            System.out.println("Task already present");
+            text.setText("Task already present");
+            return true;
+        } return false;
+    }
+
+    boolean isTextEmpty() {
         label.setText("");
         if (text.getText().isEmpty()) {
             System.out.println("The Task content is Empty!");
@@ -61,7 +72,7 @@ public class ToDoList {
         } return false;
     }
 
-    boolean taskSelected() {
+    boolean isTaskSelected() {
         label.setText("");
         if (tasks.getSelectionModel().getSelectedIndex() == -1) {
             System.out.println("No selected item");
@@ -71,25 +82,39 @@ public class ToDoList {
     }
 
     @FXML
-    void addTask() {
-        if (!isTaskEmpty()) { tasks.getItems().add(text.getText()); };
+    void addTask() throws SQLException {
+        String tempText = text.getText();
+        if (!isTextEmpty() && !isTaskPresent(tempText)) {
+            tasks.getItems().add(tempText);
+            con.createStatement().execute("insert into StudyHive.ToDo(Task) value (\"" + tempText + "\");");
+        }
     }
 
     @FXML
-    void deleteTask() {
+    void deleteTask() throws SQLException {
         int index = tasks.getSelectionModel().getSelectedIndex();
-        if (!isListEmpty() && taskSelected()) { tasks.getItems().remove(index); }
+        if (!isListEmpty() && isTaskSelected()) {
+            String task = tasks.getItems().get(index);
+            tasks.getItems().remove(index);
+            System.out.printf("%d %s\n", index, task);
+            con.createStatement().execute("delete from StudyHive.ToDo where Task = \"" + task + "\";");
+        }
     }
 
     @FXML
-    void editTask() {
+    void editTask() throws SQLException {
         int index = tasks.getSelectionModel().getSelectedIndex();
-        if (!isTaskEmpty() && taskSelected()) { tasks.getItems().set(index, text.getText()); }
+        System.out.println(index);
+        if (!isTextEmpty() && isTaskSelected()) {
+            String toTask = text.getText();
+            con.createStatement().execute("update StudyHive.ToDo set Task = \"" + toTask + "\" where Task = \"" + tasks.getItems().get(index) + "\";");
+            tasks.getItems().set(index, toTask);
+        }
     }
 
     @FXML
-    void save() {
-        System.out.println(tasks.getItems());
+    void save() throws SQLException {
+        System.out.println(tasks.getSelectionModel().getSelectedIndex());
     }
 
 }
