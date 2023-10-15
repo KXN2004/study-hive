@@ -3,15 +3,18 @@ package com.app.studyhive;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 
+import java.net.URL;
 import java.sql.*;
+import java.util.ResourceBundle;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
 
-public class ToDoList {
+public class ToDoList implements Initializable {
 
     static Connection con;
 
@@ -49,7 +52,7 @@ public class ToDoList {
         ObservableList<String> taskList = tasks.getItems();
         if (taskList.contains(string)) {
             System.out.println("Task already present");
-            text.setText("Task already present");
+            label.setText("Task already present");
             return true;
         } return false;
     }
@@ -117,4 +120,12 @@ public class ToDoList {
         System.out.println(tasks.getSelectionModel().getSelectedIndex());
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            ResultSet rs = con.createStatement().executeQuery("select * from StudyHive.ToDo");
+            while (rs.next())
+                tasks.getItems().add(rs.getString("Task"));
+        } catch (SQLException ignored) {}
+    }
 }
