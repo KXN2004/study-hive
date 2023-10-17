@@ -116,7 +116,7 @@ public class ToDoList implements Initializable {
     }
 
     @FXML
-    void save() throws SQLException {
+    void save() {
         System.out.println(tasks.getSelectionModel().getSelectedIndex());
     }
 
@@ -126,6 +126,6 @@ public class ToDoList implements Initializable {
             ResultSet rs = con.createStatement().executeQuery("select * from StudyHive.ToDo");
             while (rs.next())
                 tasks.getItems().add(rs.getString("Task"));
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignore) {}
     }
 }

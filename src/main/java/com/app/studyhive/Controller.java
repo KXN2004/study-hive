@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.*;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;

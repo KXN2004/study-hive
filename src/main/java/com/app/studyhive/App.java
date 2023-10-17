@@ -12,7 +12,7 @@ import java.io.IOException;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("todo-list.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("material.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
         stage.setTitle("StudyHive - A study group organizer");

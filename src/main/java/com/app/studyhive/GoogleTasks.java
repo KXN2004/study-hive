@@ -72,13 +72,15 @@ public class GoogleTasks {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        Task x = service.tasks().get("MDU5NzQ2ODIyODQxNTQxODQ0OTk6MDow", "Z2kyM3B5Wi1CY2ZVRldCOQ").execute();
-
-        System.out.println(new Task().getId());
         // Print the first 10 task lists.
         TaskLists result = service.tasklists().list().execute();
         List<TaskList> taskLists = result.getItems();
         service.tasklists().insert(new TaskList().setTitle("New List")).execute();
+
+        com.google.api.services.tasks.model.Tasks x = service.tasks().list("MDU5NzQ2ODIyODQxNTQxODQ0OTk6MDow").execute();
+        Task t = x.getItems().get(0);
+
+//        service.tasks().update("MDU5NzQ2ODIyODQxNTQxODQ0OTk6MDow", x., new Task().setTitle("upda")).execute();
 
         if (taskLists == null || taskLists.isEmpty()) {
             System.out.println("No task lists found.");

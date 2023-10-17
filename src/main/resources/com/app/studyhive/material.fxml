@@ -18,49 +18,58 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="579.0" prefWidth="579.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.ToDoList">
+<AnchorPane prefHeight="579.0" prefWidth="579.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.Register">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="261.0" layoutY="105.0" prefHeight="468.0" prefWidth="289.0">
+      <VBox alignment="CENTER" layoutX="261.0" layoutY="72.0" prefHeight="502.0" prefWidth="289.0">
          <children>
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="278.0" spacing="10.0">
                <children>
-                  <MFXTextField floatingText="First Name" prefHeight="51.0" prefWidth="135.0" />
-                  <MFXTextField floatingText="Last Name" prefHeight="51.0" prefWidth="135.0" />
+                  <MFXTextField fx:id="fname" floatingText="First Name" prefHeight="51.0" prefWidth="135.0" />
+                  <MFXTextField fx:id="lname" floatingText="Last Name" prefHeight="51.0" prefWidth="135.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="278.0">
                <children>
-                  <MFXTextField floatingText="Username" prefWidth="280.0" />
+                  <MFXTextField fx:id="username" floatingText="Username" prefWidth="280.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="200.0">
                <children>
-                  <MFXTextField floatingText="Email" prefHeight="51.0" prefWidth="280.0" />
+                  <MFXTextField fx:id="email" floatingText="Email" prefHeight="51.0" prefWidth="280.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="200.0" spacing="10.0">
                <children>
-                  <MFXComboBox fx:id="myComboBox" floatingText="Gender" prefHeight="51.0" prefWidth="135.0" />
-                  <MFXDatePicker floatMode="INLINE" floatingText="Birth Date" prefHeight="51.0" prefWidth="135.0" />
+                  <MFXComboBox fx:id="gender" floatingText="Gender" onMouseClicked="#initializeGender" prefHeight="51.0" prefWidth="135.0" />
+                  <MFXDatePicker fx:id="birthdate" floatMode="INLINE" floatingText="Birth Date" prefHeight="51.0" prefWidth="135.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="200.0">
                <children>
-                  <MFXPasswordField floatingText="Password" prefWidth="280.0" />
+                  <MFXPasswordField fx:id="password" floatingText="Password" prefWidth="280.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="200.0">
                <children>
-                  <MFXPasswordField floatingText="Confirm Password" prefWidth="280.0" />
+                  <MFXPasswordField fx:id="confirmPassword" floatingText="Confirm Password" prefWidth="280.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+            <HBox alignment="CENTER" prefHeight="21.0" prefWidth="289.0">
                <children>
-                  <MFXButton fx:id="myButton" buttonType="RAISED" onAction="#clickButton" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Local Sign up">
+                  <Label fx:id="prompt" textFill="#ff1919">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="66.0" prefWidth="289.0" spacing="10.0">
+               <children>
+                  <MFXButton fx:id="login" buttonType="RAISED" onAction="#signIn" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Sign In">
                      <font>
                         <Font size="16.0" />
                      </font></MFXButton>
-                  <MFXButton buttonType="RAISED" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Google Sign up">
+                  <MFXButton fx:id="register" buttonType="RAISED" onAction="#signUp" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Sign Up">
                      <font>
                         <Font size="16.0" />
                      </font></MFXButton>
@@ -89,7 +98,7 @@
             </LinearGradient>
          </fill>
       </Rectangle>
-      <Label layoutX="323.0" layoutY="31.0" text="Register">
+      <Label layoutX="310.0" layoutY="21.0" text="Welcome">
          <font>
             <Font name="System Bold" size="48.0" />
          </font>
@@ -99,5 +108,10 @@
             <Image url="@images/studyhive.png" />
          </image>
       </ImageView>
+      <MFXButton fx:id="google" buttonType="RAISED" layoutX="51.0" layoutY="440.0" onAction="#oauth" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Google">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </MFXButton>
    </children>
 </AnchorPane>
