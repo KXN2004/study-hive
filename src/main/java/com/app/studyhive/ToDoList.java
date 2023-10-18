@@ -7,11 +7,16 @@ import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+
+import static java.lang.Thread.sleep;
 
 
 public class ToDoList implements Initializable {
@@ -47,11 +52,13 @@ public class ToDoList implements Initializable {
     @FXML
     private MFXTextField text;
 
+    @FXML
+    private ListView<String> calendarEvents;
+
     boolean isTaskPresent(String string) {
         label.setText("");
         ObservableList<String> taskList = tasks.getItems();
         if (taskList.contains(string)) {
-            System.out.println("Task already present");
             label.setText("Task already present");
             return true;
         } return false;
@@ -60,7 +67,6 @@ public class ToDoList implements Initializable {
     boolean isTextEmpty() {
         label.setText("");
         if (text.getText().isEmpty()) {
-            System.out.println("The Task content is Empty!");
             label.setText("The Task content is Empty!");
             return true;
         } return false;
@@ -69,7 +75,6 @@ public class ToDoList implements Initializable {
     boolean isListEmpty() {
         label.setText("");
         if (tasks.getItems().isEmpty()) {
-            System.out.println("The ToDo List is Empty!");
             label.setText("Cannot delete from empty list!");
             return true;
         } return false;
@@ -78,7 +83,6 @@ public class ToDoList implements Initializable {
     boolean isTaskSelected() {
         label.setText("");
         if (tasks.getSelectionModel().getSelectedIndex() == -1) {
-            System.out.println("No selected item");
             label.setText("No Selected item!");
             return false;
         } return true;
@@ -99,7 +103,6 @@ public class ToDoList implements Initializable {
         if (!isListEmpty() && isTaskSelected()) {
             String task = tasks.getItems().get(index);
             tasks.getItems().remove(index);
-            System.out.printf("%d %s\n", index, task);
             con.createStatement().execute("delete from StudyHive.ToDo where Task = \"" + task + "\";");
         }
     }
@@ -107,17 +110,11 @@ public class ToDoList implements Initializable {
     @FXML
     void editTask() throws SQLException {
         int index = tasks.getSelectionModel().getSelectedIndex();
-        System.out.println(index);
         if (!isTextEmpty() && isTaskSelected()) {
             String toTask = text.getText();
             con.createStatement().execute("update StudyHive.ToDo set Task = \"" + toTask + "\" where Task = \"" + tasks.getItems().get(index) + "\";");
             tasks.getItems().set(index, toTask);
         }
-    }
-
-    @FXML
-    void save() {
-        System.out.println(tasks.getSelectionModel().getSelectedIndex());
     }
 
     @Override
@@ -126,6 +123,9 @@ public class ToDoList implements Initializable {
             ResultSet rs = con.createStatement().executeQuery("select * from StudyHive.ToDo");
             while (rs.next())
                 tasks.getItems().add(rs.getString("Task"));
+            rs = con.createStatement().executeQuery("Select * from StudyHive.events");
+            while (rs.next())
+                calendarEvents.getItems().add(rs.getString("event"));
         } catch (SQLException ignore) {}
     }
 }

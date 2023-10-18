@@ -3,6 +3,7 @@ package com.app.studyhive;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -47,7 +48,7 @@ public class Controller {
     // Function to be called when the student wants to sign in using google
     @FXML
     void googleSignIn() throws GeneralSecurityException, IOException {
-        Google.signIn();
+//        Google.signIn();
     }
 
     // Function to be called when the student wants to sign in

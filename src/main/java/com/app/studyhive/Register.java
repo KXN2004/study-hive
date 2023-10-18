@@ -3,12 +3,10 @@ package com.app.studyhive;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.*;
+import java.util.List;
 import java.util.Objects;
 
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXDatePicker;
-import io.github.palexdev.materialfx.controls.MFXPasswordField;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.collections.FXCollections;
@@ -22,6 +20,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import org.mindrot.jbcrypt.BCrypt;
 
 
 public class Register {
@@ -70,14 +69,14 @@ public class Register {
         gender.setItems(FXCollections.observableArrayList("Male", "Female"));
     }
 
-    boolean verifyInput(String string) {
+    boolean verifyInput(String string, int sizeLimit) {
         if (string.isEmpty()) {
             prompt.setText("Some text field is empty!");
             return false;
         } else if (string.contains(" ")) {
             prompt.setText("Some text field contains whitespace!");
             return false;
-        } else if (string.length() > 9) {
+        } else if (string.length() > sizeLimit) {
             prompt.setText("Some text field entry is too long!");
             return false;
         }
@@ -102,13 +101,24 @@ public class Register {
 
     @FXML
     void oauth(ActionEvent event) throws GeneralSecurityException, IOException {
-        Google.signIn();
-        switchScene(event);
+        try {
+            List<String> events = Google.signIn();
+            con.createStatement().execute("truncate table StudyHive.events;");
+            for (String x: events){
+                String dml = String.format("insert into StudyHive.events value ('%s');", x);
+                con.createStatement().executeUpdate(dml);
+            }
+            switchScene(event);
+        } catch (IOException e) {
+            prompt.setText("Google authorization cancelled!");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     void signIn(ActionEvent event) throws SQLException, IOException {
-        if (verifyInput(username.getText()) && verifyInput(password.getText())) {
+        if (verifyInput(username.getText(), 20) && verifyInput(password.getText(), 8)) {
             ResultSet resultSet = con.createStatement().executeQuery("select * from StudyHive.users where username = \"" + username.getText() + "\"");
             if (!resultSet.next()) {
                 prompt.setText("Username doesn't exist");
@@ -125,12 +135,12 @@ public class Register {
 
     @FXML
     void signUp(ActionEvent event) throws SQLException {
-        if (!(verifyInput(username.getText())
-            && verifyInput(password.getText())
-            && verifyInput(fname.getText())
-            && verifyInput(lname.getText())
-            && verifyInput(email.getText())
-            && verifyInput(confirmPassword.getText()))) {
+        if (!(verifyInput(username.getText(), 20)
+            && verifyInput(password.getText(), 8)
+            && verifyInput(fname.getText(), 20)
+            && verifyInput(lname.getText(), 20)
+            && verifyInput(email.getText(), 40)
+            && verifyInput(confirmPassword.getText(), 8))) {
             return;
         } else if (gender.getSelectedItem() == null) {
             prompt.setText("Select your gender");
@@ -142,16 +152,18 @@ public class Register {
         if (comparePasswords(password.getText(), confirmPassword.getText())) {
             try {
                 String query = String.format(
-                        "insert into StudyHive.users values (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")",
-                        username.getText(),
-                        fname.getText(),
-                        lname.getText(),
-                        gender.getSelectedItem(),
-                        birthdate.getValue(),
-                        email.getText(),
-                        BCrypt.hashpw(password.getText(), BCrypt.gensalt())
+                    "insert into StudyHive.users values (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")",
+                    username.getText(),
+                    fname.getText(),
+                    lname.getText(),
+                    gender.getSelectedItem(),
+                    birthdate.getValue(),
+                    email.getText(),
+                    BCrypt.hashpw(password.getText(), BCrypt.gensalt())
                 );
                 con.createStatement().execute(query);
+                prompt.setTextFill(green);
+                prompt.setText("Registration successful!");
             } catch (SQLIntegrityConstraintViolationException ignore) {
                 prompt.setText("Student already exists!");
             }

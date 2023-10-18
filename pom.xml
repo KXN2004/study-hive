@@ -61,6 +61,12 @@
              <artifactId>jbcrypt</artifactId>
              <version>0.4</version>
          </dependency>
+        <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.1.0</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
         <dependency>
             <groupId>com.google.api-client</groupId>
@@ -90,12 +96,6 @@
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-calendar</artifactId>
             <version>v3-rev20230825-2.0.0</version>
-        </dependency>
-        <!-- Google Classroom -->
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-classroom</artifactId>
-            <version>v1-rev20230706-2.0.0</version>
         </dependency>
     </dependencies>
 
