@@ -59,6 +59,7 @@ public class Register {
     static {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive","root", System.getenv("DB_PASSWORD"));
+//            private int db = con.createStatement().executeQuery("");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -95,7 +96,7 @@ public class Register {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
-        stage.setTitle("ToDo List");
+        stage.setTitle("Dashboard");
         stage.show();
     }
 
@@ -124,6 +125,8 @@ public class Register {
                 prompt.setText("Username doesn't exist");
             } else {
                 if (BCrypt.checkpw(password.getText(), resultSet.getString("Password"))) {
+                    con.createStatement().executeUpdate("update StudyHive.status set logged_in=false;");
+                    con.createStatement().executeUpdate("update StudyHive.status set logged_in=true where user=" + resultSet.getInt("reg_id"));
                     prompt.setTextFill(green);
                     prompt.setText("Login successful!");
                     switchScene(event);
@@ -152,7 +155,8 @@ public class Register {
         if (comparePasswords(password.getText(), confirmPassword.getText())) {
             try {
                 String query = String.format(
-                    "insert into StudyHive.users values (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")",
+                    "insert into StudyHive.users (Username, Fname, Lname, Gender, Birthdate, Email, Password) " +
+                    "value (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")",
                     username.getText(),
                     fname.getText(),
                     lname.getText(),
@@ -162,6 +166,10 @@ public class Register {
                     BCrypt.hashpw(password.getText(), BCrypt.gensalt())
                 );
                 con.createStatement().execute(query);
+                ResultSet rs = con.createStatement().executeQuery("select reg_id from StudyHive.users where Username=\"" + username.getText() + "\";");
+                rs.next();
+                con.createStatement().execute("create table user" + rs.getInt("reg_id") + "(Task varchar(50));");
+                con.createStatement().executeUpdate("insert into StudyHive.status(user) value (" + rs.getInt("reg_id") + ");");
                 prompt.setTextFill(green);
                 prompt.setText("Registration successful!");
             } catch (SQLIntegrityConstraintViolationException ignore) {

@@ -23,9 +23,14 @@ public class ToDoList implements Initializable {
 
     static Connection con;
 
+    private static final int db_no;
+
     static {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive", "root", System.getenv("DB_PASSWORD"));
+            ResultSet rs =  con.createStatement().executeQuery("select user from StudyHive.status where logged_in=true");
+            rs.next();
+            db_no = rs.getInt("user");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -93,7 +98,7 @@ public class ToDoList implements Initializable {
         String tempText = text.getText();
         if (!isTextEmpty() && !isTaskPresent(tempText)) {
             tasks.getItems().add(tempText);
-            con.createStatement().execute("insert into StudyHive.ToDo(Task) value (\"" + tempText + "\");");
+            con.createStatement().execute("insert into StudyHive.user" + db_no  + "(Task) value (\"" + tempText + "\");");
         }
     }
 
@@ -103,7 +108,7 @@ public class ToDoList implements Initializable {
         if (!isListEmpty() && isTaskSelected()) {
             String task = tasks.getItems().get(index);
             tasks.getItems().remove(index);
-            con.createStatement().execute("delete from StudyHive.ToDo where Task = \"" + task + "\";");
+            con.createStatement().execute("delete from StudyHive.user" + db_no + " where Task = \"" + task + "\";");
         }
     }
 
@@ -112,7 +117,7 @@ public class ToDoList implements Initializable {
         int index = tasks.getSelectionModel().getSelectedIndex();
         if (!isTextEmpty() && isTaskSelected()) {
             String toTask = text.getText();
-            con.createStatement().execute("update StudyHive.ToDo set Task = \"" + toTask + "\" where Task = \"" + tasks.getItems().get(index) + "\";");
+            con.createStatement().execute("update StudyHive.user" + db_no + " set Task = \"" + toTask + "\" where Task = \"" + tasks.getItems().get(index) + "\";");
             tasks.getItems().set(index, toTask);
         }
     }
@@ -120,7 +125,7 @@ public class ToDoList implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            ResultSet rs = con.createStatement().executeQuery("select * from StudyHive.ToDo");
+            ResultSet rs = con.createStatement().executeQuery("select * from StudyHive.user" + db_no);
             while (rs.next())
                 tasks.getItems().add(rs.getString("Task"));
             rs = con.createStatement().executeQuery("Select * from StudyHive.events");

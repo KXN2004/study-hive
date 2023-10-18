@@ -16,7 +16,6 @@ public class App extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
         stage.setTitle("StudyHive - A study group organizer");
-        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
