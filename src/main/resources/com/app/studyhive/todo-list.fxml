@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.ToDoList">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="488.0" prefWidth="538.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.ToDoList">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="300.0" prefHeight="400.0" prefWidth="248.0">
+      <VBox alignment="TOP_CENTER" layoutX="264.0" layoutY="74.0" prefHeight="400.0" prefWidth="248.0">
          <children>
             <MFXTextField fx:id="text" floatingText="Enter your task here..." prefHeight="51.0" prefWidth="230.0" />
             <HBox alignment="CENTER" prefHeight="45.0" prefWidth="238.0" spacing="10.0">
@@ -36,10 +36,16 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </VBox>
-      <ListView fx:id="calendarEvents" layoutX="55.0" layoutY="59.0" prefHeight="306.0" prefWidth="200.0" />
-      <Label layoutX="70.0" layoutY="27.0" text="Calendar Events">
+      <ListView fx:id="calendarEvents" layoutX="34.0" layoutY="129.0" prefHeight="308.0" prefWidth="200.0" />
+      <Label layoutX="49.0" layoutY="86.0" text="Calendar Events">
          <font>
             <Font name="Helvetica" size="23.0" />
+         </font>
+      </Label>
+      <MFXButton fx:id="logout" buttonType="RAISED" layoutX="451.0" layoutY="30.0" onAction="#exit" text="Logout" />
+      <Label fx:id="welcome" layoutX="32.0" layoutY="18.0">
+         <font>
+            <Font name="Helvetica" size="41.0" />
          </font>
       </Label>
    </children>

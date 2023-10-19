@@ -3,38 +3,45 @@ package com.app.studyhive;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 
-import javafx.application.Platform;
+import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
+import io.github.palexdev.materialfx.css.themes.Themes;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-
-import static java.lang.Thread.sleep;
+import javafx.stage.Stage;
 
 
 public class ToDoList implements Initializable {
 
     static Connection con;
 
-    private static final int db_no;
+    private static int db_no;
 
     static {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudyHive", "root", System.getenv("DB_PASSWORD"));
-            ResultSet rs =  con.createStatement().executeQuery("select user from StudyHive.status where logged_in=true");
-            rs.next();
-            db_no = rs.getInt("user");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    @FXML
+    private Label welcome;
+
+    @FXML
+    private MFXButton logout;
 
     @FXML
     private Label label;
@@ -59,6 +66,18 @@ public class ToDoList implements Initializable {
 
     @FXML
     private ListView<String> calendarEvents;
+
+    @FXML
+    void exit(ActionEvent event) throws IOException, SQLException {
+        con.createStatement().executeUpdate("update StudyHive.status set logged_in=false where user=\"" + db_no + "\";");
+        Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
+        stage.setTitle("Dashboard");
+        stage.show();
+    }
 
     boolean isTaskPresent(String string) {
         label.setText("");
@@ -125,7 +144,13 @@ public class ToDoList implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            ResultSet rs = con.createStatement().executeQuery("select * from StudyHive.user" + db_no);
+            ResultSet rs =  con.createStatement().executeQuery("select user from StudyHive.status where logged_in=true");
+            rs.next();
+            db_no = rs.getInt("user");
+            rs = con.createStatement().executeQuery("select Fname from StudyHive.users where reg_id=" + db_no);
+            rs.next();
+            welcome.setText("Welcome, " + rs.getString("fname"));
+            rs = con.createStatement().executeQuery("select * from StudyHive.user" + db_no);
             while (rs.next())
                 tasks.getItems().add(rs.getString("Task"));
             rs = con.createStatement().executeQuery("Select * from StudyHive.events");

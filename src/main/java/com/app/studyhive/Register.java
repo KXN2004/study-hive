@@ -117,6 +117,7 @@ public class Register {
             for (String x: events){
                 String dml = String.format("insert into StudyHive.events value ('%s');", x);
                 con.createStatement().executeUpdate(dml);
+                System.out.println("Inserted events");
             }
             switchScene(event, "todo-list.fxml");
         } catch (IOException e) {
@@ -170,6 +171,7 @@ public class Register {
                 loginPrompt.setText("Username doesn't exist");
             } else {
                 if (BCrypt.checkpw(passField.getText(), resultSet.getString("Password"))) {
+                    con.createStatement().executeUpdate("delete from events");
                     con.createStatement().executeUpdate("update StudyHive.status set logged_in=false;");
                     con.createStatement().executeUpdate("update StudyHive.status set logged_in=true where user=" + resultSet.getInt("reg_id"));
                     loginPrompt.setTextFill(green);
