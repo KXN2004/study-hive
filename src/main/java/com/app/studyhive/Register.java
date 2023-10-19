@@ -54,6 +54,15 @@ public class Register {
     @FXML
     private MFXTextField username;
 
+    @FXML
+    private MFXTextField passField;
+
+    @FXML
+    private MFXTextField userField;
+
+    @FXML
+    private Label loginPrompt;
+
     static Connection con;
 
     static {
@@ -90,8 +99,8 @@ public class Register {
         return pass1.equals(pass2);
     }
 
-    void switchScene(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("todo-list.fxml")));
+    void switchScene(ActionEvent event, String name) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource(name));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -109,7 +118,7 @@ public class Register {
                 String dml = String.format("insert into StudyHive.events value ('%s');", x);
                 con.createStatement().executeUpdate(dml);
             }
-            switchScene(event);
+            switchScene(event, "todo-list.fxml");
         } catch (IOException e) {
             prompt.setText("Google authorization cancelled!");
         } catch (SQLException e) {
@@ -118,20 +127,55 @@ public class Register {
     }
 
     @FXML
+    void switchToLogin(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Login.fxml")));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
+        stage.setTitle("Dashboard");
+        stage.show();
+    }
+
+    @FXML
+    void switchToRegister(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("material.fxml")));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
+        stage.setTitle("Dashboard");
+        stage.show();
+    }
+
+    boolean verifyLogin(String string, int sizeLimit) {
+        if (string.isEmpty()) {
+            loginPrompt.setText("Some text field is empty!");
+            return false;
+        } else if (string.contains(" ")) {
+            loginPrompt.setText("Some text field contains whitespace!");
+            return false;
+        } else if (string.length() > sizeLimit) {
+            loginPrompt.setText("Some text field entry is too long!");
+            return false;
+        }
+        return true;
+    }
+
+    @FXML
     void signIn(ActionEvent event) throws SQLException, IOException {
-        if (verifyInput(username.getText(), 20) && verifyInput(password.getText(), 8)) {
-            ResultSet resultSet = con.createStatement().executeQuery("select * from StudyHive.users where username = \"" + username.getText() + "\"");
+        if (verifyLogin(userField.getText(), 20) && verifyLogin(passField.getText(), 8)) {
+            ResultSet resultSet = con.createStatement().executeQuery("select * from StudyHive.users where username = \"" + userField.getText() + "\"");
             if (!resultSet.next()) {
-                prompt.setText("Username doesn't exist");
+                loginPrompt.setText("Username doesn't exist");
             } else {
-                if (BCrypt.checkpw(password.getText(), resultSet.getString("Password"))) {
+                if (BCrypt.checkpw(passField.getText(), resultSet.getString("Password"))) {
                     con.createStatement().executeUpdate("update StudyHive.status set logged_in=false;");
                     con.createStatement().executeUpdate("update StudyHive.status set logged_in=true where user=" + resultSet.getInt("reg_id"));
-                    prompt.setTextFill(green);
-                    prompt.setText("Login successful!");
-                    switchScene(event);
-                } else
-                    prompt.setText("Incorrect password");
+                    loginPrompt.setTextFill(green);
+                    loginPrompt.setText("Login successful!");
+                    switchScene(event, "todo-list.fxml");
+                } else loginPrompt.setText("Incorrect password");
             }
         }
     }
@@ -163,7 +207,7 @@ public class Register {
                     gender.getSelectedItem(),
                     birthdate.getValue(),
                     email.getText(),
-                    BCrypt.hashpw(password.getText(), BCrypt.gensalt())
+                    BCrypt.hashpw(password.getText(), BCrypt.gensalt(16))
                 );
                 con.createStatement().execute(query);
                 ResultSet rs = con.createStatement().executeQuery("select reg_id from StudyHive.users where Username=\"" + username.getText() + "\";");

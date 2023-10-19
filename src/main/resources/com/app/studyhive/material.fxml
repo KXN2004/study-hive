@@ -65,7 +65,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="66.0" prefWidth="289.0" spacing="10.0">
                <children>
-                  <MFXButton fx:id="login" buttonType="RAISED" onAction="#signIn" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Sign In">
+                  <MFXButton fx:id="login" buttonType="RAISED" onAction="#switchToLogin" prefHeight="51.0" prefWidth="135.0" rippleColor="#3a00ff" text="Login">
                      <font>
                         <Font size="16.0" />
                      </font></MFXButton>

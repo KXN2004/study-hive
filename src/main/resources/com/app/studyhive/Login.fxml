@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="315.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.studyhive.Register">
+   <children>
+      <VBox alignment="CENTER" layoutX="51.0" layoutY="67.0" prefHeight="227.0" prefWidth="213.0">
+         <children>
+            <MFXTextField fx:id="userField" floatingText="Username" prefHeight="51.0" prefWidth="202.0">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </MFXTextField>
+            <MFXTextField fx:id="passField" floatingText="Password" prefHeight="51.0" prefWidth="202.0">
+               <VBox.margin>
+                  <Insets bottom="15.0" top="5.0" />
+               </VBox.margin>
+            </MFXTextField>
+            <Label fx:id="loginPrompt" textFill="#ff001d" />
+            <HBox alignment="CENTER" prefHeight="73.0" prefWidth="213.0" spacing="10.0">
+               <children>
+                  <MFXButton buttonType="RAISED" onAction="#signIn" prefHeight="50.0" prefWidth="96.0" text="Sign In">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton buttonType="RAISED" onAction="#switchToRegister" prefHeight="50.0" prefWidth="96.0" text="Register">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </MFXButton>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Label layoutX="120.0" layoutY="28.0" text="Login">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
