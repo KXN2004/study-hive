@@ -42,11 +42,13 @@
             <Font name="Helvetica" size="23.0" />
          </font>
       </Label>
-      <MFXButton fx:id="logout" buttonType="RAISED" layoutX="451.0" layoutY="30.0" onAction="#exit" text="Logout" />
+      <MFXButton fx:id="logout" buttonType="RAISED" layoutX="441.0" layoutY="30.0" onAction="#exit" text="Logout" />
       <Label fx:id="welcome" layoutX="32.0" layoutY="18.0">
          <font>
             <Font name="Helvetica" size="41.0" />
          </font>
       </Label>
+      <Label fx:id="timer" layoutX="62.0" layoutY="449.0" />
+      <MFXButton fx:id="reset" buttonType="RAISED" layoutX="124.0" layoutY="444.0" onAction="#resetPomodoro" text="Reset" />
    </children>
 </AnchorPane>

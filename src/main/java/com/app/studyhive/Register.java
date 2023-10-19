@@ -122,6 +122,7 @@ public class Register {
             switchScene(event, "todo-list.fxml");
         } catch (IOException e) {
             prompt.setText("Google authorization cancelled!");
+            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

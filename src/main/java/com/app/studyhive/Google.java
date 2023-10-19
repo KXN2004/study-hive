@@ -9,7 +9,6 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /* Google oauth libraries */
 import com.google.api.client.auth.oauth2.Credential;
@@ -127,8 +126,6 @@ public class Google {
                 eventList.add(event.getSummary());
                 System.out.printf("%s (%s)\n", event.getSummary(), start);
             }
-        }
-
-        return eventList;
+        } return eventList;
     }
 }

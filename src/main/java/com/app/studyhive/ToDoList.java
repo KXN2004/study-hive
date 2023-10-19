@@ -10,6 +10,9 @@ import java.util.ResourceBundle;
 
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 
 public class ToDoList implements Initializable {
 
@@ -36,6 +39,9 @@ public class ToDoList implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    @FXML
+    private Label timer;
 
     @FXML
     private Label welcome;
@@ -67,6 +73,10 @@ public class ToDoList implements Initializable {
     @FXML
     private ListView<String> calendarEvents;
 
+    private static int minutes = 5;
+    private static int seconds = 59;
+    private static Timeline timeline;
+
     @FXML
     void exit(ActionEvent event) throws IOException, SQLException {
         con.createStatement().executeUpdate("update StudyHive.status set logged_in=false where user=\"" + db_no + "\";");
@@ -77,6 +87,26 @@ public class ToDoList implements Initializable {
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
         stage.setTitle("Dashboard");
         stage.show();
+    }
+
+    void setTime() {
+        timer.setText(minutes + ":" + seconds);
+        if (minutes == 0) {
+            timeline.stop();
+        }
+        if (seconds == 0) {
+            minutes--;
+            seconds = 59;
+            timer.setText(minutes + ":" + seconds);
+            return;
+        } seconds--;
+    }
+
+    @FXML
+    void resetPomodoro(ActionEvent event) {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> setTime()));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     boolean isTaskPresent(String string) {
@@ -144,18 +174,23 @@ public class ToDoList implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            ResultSet rs =  con.createStatement().executeQuery("select user from StudyHive.status where logged_in=true");
-            rs.next();
-            db_no = rs.getInt("user");
-            rs = con.createStatement().executeQuery("select Fname from StudyHive.users where reg_id=" + db_no);
-            rs.next();
-            welcome.setText("Welcome, " + rs.getString("fname"));
-            rs = con.createStatement().executeQuery("select * from StudyHive.user" + db_no);
-            while (rs.next())
-                tasks.getItems().add(rs.getString("Task"));
-            rs = con.createStatement().executeQuery("Select * from StudyHive.events");
-            while (rs.next())
+            ResultSet rs = con.createStatement().executeQuery("Select * from StudyHive.events");
+            if (rs.next()) {
                 calendarEvents.getItems().add(rs.getString("event"));
-        } catch (SQLException ignore) {}
+            } else {
+                rs = con.createStatement().executeQuery("select * from StudyHive.status where logged_in=true");
+                rs.next();
+                db_no = rs.getInt("user");
+                rs = con.createStatement().executeQuery("select Fname from StudyHive.users where reg_id=" + db_no);
+                rs.next();
+                welcome.setText("Welcome, " + rs.getString("fname"));
+                rs = con.createStatement().executeQuery("select * from StudyHive.user" + db_no);
+                while (rs.next()) {
+                    tasks.getItems().add(rs.getString("Task"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
